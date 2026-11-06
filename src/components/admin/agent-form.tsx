@@ -83,7 +83,7 @@ export function AgentForm({ action, initial, models, isEdit = false, currentMode
             {selectedModelMissing ? <option value={initial?.modelRegistryId ?? ""}>{currentModelName ?? "Previous model"} (no longer eligible)</option> : null}
             {models.map(model => <option value={model.id} key={model.id}>{model.displayName} · {model.gatewayModelId}</option>)}
           </select>
-          <p className="text-[12px] leading-5 text-muted-foreground">Hanya model text OpenAI-compatible non-Anthropic yang sudah diverifikasi. Sinkronisasi YupiAI hadir di Phase 1.4. Agent boleh dibuat tanpa model.</p>
+          <p className="text-[12px] leading-5 text-muted-foreground">Hanya model text OpenAI-compatible non-Anthropic yang sudah diverifikasi. Sinkronisasi dan verifikasi dilakukan di Admin → Models. Agent boleh dibuat tanpa model.</p>
         </div>
       </section>
       <section className="space-y-4 border-t border-border pt-6">

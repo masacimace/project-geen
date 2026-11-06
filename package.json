@@ -15,7 +15,8 @@
     "db:verify": "tsx scripts/verify-schema.ts",
     "db:smoke": "tsx scripts/smoke-social.ts",
     "admin:bootstrap": "tsx scripts/bootstrap-admin.ts",
-    "admin:smoke": "tsx scripts/smoke-admin.ts"
+    "admin:smoke": "tsx scripts/smoke-admin.ts",
+    "yupiai:smoke": "tsx scripts/smoke-yupiai.ts"
   },
   "dependencies": {
     "next": "16.4.4",

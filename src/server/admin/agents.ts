@@ -3,6 +3,7 @@ import "server-only";
 import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
 import { db } from "@/db/client";
 import { agents, agentCapabilities, agentPersonas, agentStates, modelRegistry } from "@/db/schema";
+import { isAnthropicModel } from "@/server/ai/model-catalog";
 
 export async function listManagedAgents(query = "") {
   const term = query.trim().slice(0, 80);
@@ -42,7 +43,10 @@ export async function listRegistryModels() {
 }
 
 export async function findAssignableModel(id: string) {
-  const [model] = await db.select({ id: modelRegistry.id }).from(modelRegistry).where(and(
+  const [model] = await db.select({
+    id: modelRegistry.id, gatewayModelId: modelRegistry.gatewayModelId,
+    displayName: modelRegistry.displayName, family: modelRegistry.family,
+  }).from(modelRegistry).where(and(
     eq(modelRegistry.id, id),
     eq(modelRegistry.category, "text"),
     eq(modelRegistry.openaiCompatible, true),
@@ -50,5 +54,5 @@ export async function findAssignableModel(id: string) {
     eq(modelRegistry.availability, "available"),
     sql`lower(${modelRegistry.family}) <> 'anthropic'`,
   )).limit(1);
-  return model ?? null;
+  return model && !isAnthropicModel(model) ? { id: model.id } : null;
 }

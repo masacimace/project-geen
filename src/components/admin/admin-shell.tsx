@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { Bot, House, Layers3, LogOut, UsersRound } from "lucide-react";
+import { Activity, Bot, House, Layers3, LogOut, UsersRound } from "lucide-react";
 import { logoutAdmin } from "@/server/admin/auth-actions";
 
 const nav = [
   { href: "/admin", label: "Overview", Icon: House },
   { href: "/admin/agents", label: "Agents", Icon: UsersRound },
   { href: "/admin/models", label: "Models", Icon: Layers3 },
+  { href: "/admin/usage", label: "Usage", Icon: Activity },
 ];
 
 export function AdminShell({ children, email }: { children: React.ReactNode; email: string }) {

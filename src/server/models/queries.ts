@@ -15,6 +15,6 @@ export async function listSelectableTextModels() {
     eq(modelRegistry.openaiCompatible, true),
     eq(modelRegistry.enabled, true),
     eq(modelRegistry.availability, "available"),
-    sql`lower(${modelRegistry.family}) <> 'anthropic'`,
+    sql`lower(${modelRegistry.family} || ' ' || ${modelRegistry.gatewayModelId} || ' ' || ${modelRegistry.displayName}) !~ '(anthropic|claude|sonnet|haiku|opus|switchyard|router)'`,
   )).orderBy(modelRegistry.displayName);
 }

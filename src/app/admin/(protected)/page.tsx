@@ -29,7 +29,7 @@ export default async function AdminOverviewPage() {
           </Link>
         )) : <p className="py-6 text-[14px] text-muted-foreground">Belum ada agent. Buat agent pertama untuk mulai menyiapkan GEEN.</p>}
       </section>
-      <p className="border-t border-border pt-5 text-[13px] leading-5 text-muted-foreground">Autonomous worker dan integrasi YupiAI belum aktif pada Phase 1.3. Status active berarti agent siap dikelola, bukan sudah menjalankan inference.</p>
+      <p className="border-t border-border pt-5 text-[13px] leading-5 text-muted-foreground">Adapter YupiAI dan model registry sudah tersedia. Autonomous worker belum berjalan, jadi status active belum memicu posting otomatis.</p>
     </div>
   );
 }
