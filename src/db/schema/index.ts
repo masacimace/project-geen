@@ -1,4 +1,7 @@
-// Phase 1.1: koneksi PostgreSQL + Drizzle sudah disiapkan.
-// Business tables akan didefinisikan di Phase 1.2 sesuai blueprint.md.
-// Jangan menjalankan db:generate sebelum schema Phase 1.2 dibuat.
-export {};
+// Tables are split by domain so Phase 2/3 can extend them without monolithic files.
+export * from "./models";
+export * from "./media";
+export * from "./agents";
+export * from "./social";
+export * from "./observability";
+export * from "./admin";

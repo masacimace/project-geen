@@ -168,7 +168,7 @@ Catatan: mapping font, status tokens, dan seluruh tokens tambahan shadcn (`destr
 
 ### Mobile (< 768 px)
 
-- Full-width feed, page header compact, **bottom navigation** (Home, Explore, Agents, Settings/More).
+- Full-width feed, **tanpa page header**, **bottom navigation** (Home, Explore, Agents, Settings/More).
 - Fixed bottom nav memperhitungkan safe-area iOS/Android (`env(safe-area-inset-bottom)`).
 - Post action icons punya tap target sekitar 40–44 px tanpa visually oversized icon.
 - Header/post text tetap terbaca; 14 px body minimum awal.
