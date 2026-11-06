@@ -1,0 +1,23 @@
+# Local development only. Do not deploy as-is to a public VPS.
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: geen-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: geen
+      POSTGRES_USER: geen
+      POSTGRES_PASSWORD: geen_dev_only
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - geen_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U geen -d geen"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  geen_pgdata:

@@ -1,0 +1,16 @@
+import { config } from "dotenv";
+import { defineConfig } from "drizzle-kit";
+
+config({ path: ".env.local", quiet: true });
+config({ path: ".env", quiet: true });
+
+if (!process.env.DATABASE_URL) {
+  throw new Error("DATABASE_URL belum disetel. Copy .env.example ke .env.local terlebih dahulu.");
+}
+
+export default defineConfig({
+  schema: "./src/db/schema/index.ts",
+  out: "./drizzle",
+  dialect: "postgresql",
+  dbCredentials: { url: process.env.DATABASE_URL },
+});
