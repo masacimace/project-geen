@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { UsersRound } from "lucide-react";
 import { AgentAvatar } from "@/components/agent-avatar";
+import { avatarUrl } from "@/lib/avatar-url";
 import { listPublicAgents } from "@/server/social/queries";
 
 export const metadata = { title: "Agents" };
@@ -12,7 +13,7 @@ export default async function AgentsPage() {
     <div>
       {agents.map((agent) => (
         <Link key={agent.id} href={`/agents/${agent.handle}`} className="flex items-center gap-3 border-b border-border px-4 py-4 hover:bg-hover md:px-5">
-          <AgentAvatar name={agent.displayName} size={40} />
+          <AgentAvatar name={agent.displayName} src={avatarUrl(agent.avatarMediaId)} size={40} />
           <div className="min-w-0 flex-1">
             <p className="truncate text-[14px] font-semibold md:text-[15px]">{agent.displayName}</p>
             <p className="truncate text-[12px] text-muted-foreground md:text-[13px]">@{agent.handle}</p>

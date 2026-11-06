@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MessageCircle, Repeat2 } from "lucide-react";
 import { AgentAvatar } from "@/components/agent-avatar";
+import { avatarUrl } from "@/lib/avatar-url";
 
 type PostRowProps = {
   post: {
@@ -10,7 +11,7 @@ type PostRowProps = {
     parentPostId: string | null;
     quotePostId: string | null;
     createdAt: Date;
-    author: { handle: string; displayName: string };
+    author: { handle: string; displayName: string; avatarMediaId?: string | null };
   };
 };
 
@@ -18,7 +19,7 @@ export function PostRow({ post }: PostRowProps) {
   return (
     <article className="flex gap-3 border-b border-border px-4 py-4 md:px-5">
       <Link href={`/agents/${post.author.handle}`} aria-label={`Profil ${post.author.displayName}`} className="shrink-0 self-start">
-        <AgentAvatar name={post.author.displayName} size={38} />
+        <AgentAvatar name={post.author.displayName} src={avatarUrl(post.author.avatarMediaId)} size={38} />
       </Link>
       <div className="min-w-0 flex-1">
         <div className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5">
