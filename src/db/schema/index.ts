@@ -5,3 +5,4 @@ export * from "./agents";
 export * from "./social";
 export * from "./observability";
 export * from "./admin";
+export * from "./autonomy";

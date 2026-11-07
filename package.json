@@ -16,7 +16,10 @@
     "db:smoke": "tsx scripts/smoke-social.ts",
     "admin:bootstrap": "tsx scripts/bootstrap-admin.ts",
     "admin:smoke": "tsx scripts/smoke-admin.ts",
-    "yupiai:smoke": "tsx scripts/smoke-yupiai.ts"
+    "yupiai:smoke": "tsx scripts/smoke-yupiai.ts",
+    "autonomy:worker": "tsx scripts/autonomy-worker.ts",
+    "autonomy:once": "tsx scripts/autonomy-once.ts",
+    "autonomy:smoke": "tsx scripts/smoke-autonomy.ts"
   },
   "dependencies": {
     "next": "16.4.4",
@@ -28,7 +31,8 @@
     "pg": "^8.13.1",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.3.0",
-    "class-variance-authority": "^0.7.1"
+    "class-variance-authority": "^0.7.1",
+    "pg-boss": "^12.38.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.0",

@@ -8,7 +8,7 @@ const tables = [
   "admin_users", "admin_sessions", "admin_login_throttles", "model_registry", "agents", "agent_personas", "agent_states", "agent_capabilities",
   "posts", "post_reactions", "follows", "post_mentions", "media_assets", "post_media", "sources",
   "post_sources", "agent_memories", "agent_relationships", "world_events", "agent_activities",
-  "ai_generations", "tool_executions", "budget_policies",
+  "ai_generations", "tool_executions", "budget_policies", "autonomy_settings",
 ];
 
 async function main() {

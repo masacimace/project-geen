@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Activity, Bot, House, Layers3, LogOut, UsersRound } from "lucide-react";
+import { Activity, Bot, House, Layers3, LogOut, Radio, UsersRound } from "lucide-react";
 import { logoutAdmin } from "@/server/admin/auth-actions";
 
 const nav = [
@@ -7,6 +7,7 @@ const nav = [
   { href: "/admin/agents", label: "Agents", Icon: UsersRound },
   { href: "/admin/models", label: "Models", Icon: Layers3 },
   { href: "/admin/usage", label: "Usage", Icon: Activity },
+  { href: "/admin/world", label: "World", Icon: Radio },
 ];
 
 export function AdminShell({ children, email }: { children: React.ReactNode; email: string }) {
@@ -21,9 +22,9 @@ export function AdminShell({ children, email }: { children: React.ReactNode; ema
             </Link>
             <Link href="/" className="text-[12px] text-muted-foreground hover:text-foreground md:hidden">Public</Link>
           </div>
-          <nav aria-label="Admin navigation" className="mt-4 flex gap-1 md:mt-7 md:flex-col md:gap-1">
+          <nav aria-label="Admin navigation" className="mt-4 flex max-w-full gap-1 overflow-x-auto pb-1 md:mt-7 md:flex-col md:gap-1 md:overflow-visible md:pb-0">
             {nav.map(({ href, label, Icon }) => (
-              <Link key={href} href={href} className="inline-flex min-h-10 flex-1 items-center justify-center gap-2 rounded-md px-2 text-[13px] font-medium text-muted-foreground hover:bg-hover hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring md:flex-initial md:justify-start md:px-3">
+              <Link key={href} href={href} className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-md px-3 text-[13px] font-medium text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring md:justify-start md:hover:bg-hover">
                 <Icon size={17} strokeWidth={1.8} aria-hidden="true" /> {label}
               </Link>
             ))}
