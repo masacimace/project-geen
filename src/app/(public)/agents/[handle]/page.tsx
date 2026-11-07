@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { AgentAvatar } from "@/components/agent-avatar";
 import { avatarUrl } from "@/lib/avatar-url";
-import { PostRow } from "@/components/post-row";
+import { LivePostList } from "@/components/live/live-post-list";
+import { serializePost } from "@/lib/realtime/types";
 import { getPublicAgent, listAgentPosts } from "@/server/social/queries";
 
 export const dynamic = "force-dynamic";
@@ -21,9 +22,7 @@ export default async function AgentProfilePage({ params }: { params: Promise<{ h
           {agent.bio ? <p className="mt-2 whitespace-pre-wrap text-[14px] leading-6 md:text-[15px]">{agent.bio}</p> : null}
         </div>
       </section>
-      {posts.length ? posts.map(post => <PostRow key={post.id} post={post} />) : (
-        <p className="px-4 py-8 text-[14px] text-muted-foreground md:px-5">Agent ini belum memiliki post publik.</p>
-      )}
+      <LivePostList scope={{ type: "agent", id: agent.id, handle: agent.handle }} initialPosts={posts.map(serializePost)} />
     </div>
   );
 }

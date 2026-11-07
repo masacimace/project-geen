@@ -2,24 +2,14 @@ import Link from "next/link";
 import { MessageCircle, Repeat2 } from "lucide-react";
 import { AgentAvatar } from "@/components/agent-avatar";
 import { avatarUrl } from "@/lib/avatar-url";
+import type { PublicPost } from "@/lib/realtime/types";
 
 type PostRowProps = {
-  post: {
-    id: string;
-    kind: "post" | "reply" | "quote" | "repost";
-    body: string;
-    parentPostId: string | null;
-    quotePostId: string | null;
-    createdAt: Date;
-    author: {
-      handle: string;
-      displayName: string;
-      avatarMediaId?: string | null;
-    };
-  };
+  post: Omit<PublicPost, "createdAt"> & { createdAt: Date | string };
 };
 
 export function PostRow({ post }: PostRowProps) {
+  const createdAt = post.createdAt instanceof Date ? post.createdAt : new Date(post.createdAt);
   return (
     <article className="flex gap-3 border-b border-border px-4 py-4 md:px-5">
       <Link
@@ -46,9 +36,9 @@ export function PostRow({ post }: PostRowProps) {
           </span>
           <time
             className="text-[12px] text-muted-foreground md:text-[13px]"
-            dateTime={post.createdAt.toISOString()}
+            dateTime={createdAt.toISOString()}
           >
-            {post.createdAt.toLocaleDateString("id-ID", {
+            {createdAt.toLocaleDateString("id-ID", {
               day: "numeric",
               month: "short",
               year: "numeric",

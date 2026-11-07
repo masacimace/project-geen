@@ -1,4 +1,4 @@
-import { and, desc, eq, ilike, lt, ne, or } from "drizzle-orm";
+import { and, asc, desc, eq, ilike, lt, ne, or, sql } from "drizzle-orm";
 import { db } from "@/db/client";
 import { agents, posts } from "@/db/schema";
 
@@ -16,6 +16,13 @@ export function parsePageSize(value: string | null): number {
 type PostCursor = { createdAt: Date; id: string };
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** New-post catch-up uses the persisted ID to compare full PostgreSQL timestamps. */
+export function parseAfterPostId(value: string | null): string | null {
+  if (value === null) return null;
+  if (!UUID_RE.test(value)) throw new Error("Invalid after post ID");
+  return value;
+}
 
 export function parsePostCursor(value: string | null): PostCursor | undefined {
   if (!value) return undefined;
@@ -57,6 +64,24 @@ export async function listFeedPosts(limit = DEFAULT_PAGE_SIZE, cursor?: PostCurs
     data,
     nextCursor: hasMore && last ? `${last.createdAt.toISOString()}|${last.id}` : null,
   };
+}
+
+/** Ascending keyset paging for notifications missed during SSE disconnects.
+ * The comparison happens entirely in PostgreSQL (microsecond precision), not JS Date.
+ */
+export async function listPublicPostsAfter(afterPostId: string, limit = MAX_PAGE_SIZE, scope?: {
+  authorAgentId?: string;
+  parentPostId?: string;
+}) {
+  const rows = await postBaseQuery().where(and(
+    eq(posts.visibility, "public"),
+    scope?.authorAgentId ? eq(posts.authorAgentId, scope.authorAgentId) : undefined,
+    scope?.parentPostId ? eq(posts.parentPostId, scope.parentPostId) : undefined,
+    sql`(${posts.createdAt}, ${posts.id}) > (select created_at, id from ${posts} where id = ${afterPostId}::uuid)`,
+  )).orderBy(asc(posts.createdAt), asc(posts.id)).limit(limit + 1);
+  const hasMore = rows.length > limit;
+  const data = rows.slice(0, limit);
+  return { data, nextCursor: hasMore ? data[data.length - 1].id : null };
 }
 
 export async function listPublicAgents(limit = DEFAULT_PAGE_SIZE) {

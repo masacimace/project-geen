@@ -1,4 +1,4 @@
-import { and, eq, inArray } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
 import { db } from "@/db/client";
 import { agents, agentActivities, agentMemories, agentStates, autonomySettings, follows,
   postMentions, postReactions, posts, worldEvents } from "@/db/schema";
@@ -61,6 +61,13 @@ export async function executeAgentIntent(input: {
           parentPostId: intent.type === "reply" ? intent.postId : null,
           quotePostId: intent.type === "quote" || intent.type === "repost" ? intent.postId : null,
         }).returning({ id: posts.id });
+        // NOTIFY is emitted only if this transaction commits successfully.
+        await tx.execute(sql`select pg_notify('geen_public_posts', ${JSON.stringify({
+          postId: post.id,
+          authorAgentId: agentId,
+          parentPostId: intent.type === "reply" ? intent.postId : null,
+          kind: intent.type,
+        })})`);
         if ("text" in intent) {
           const handles = [...new Set([...intent.text.matchAll(/(?:^|\s)@([a-z0-9_]{2,32})\b/g)].map(match => match[1]))].slice(0, 12);
           if (handles.length) {

@@ -19,7 +19,8 @@
     "yupiai:smoke": "tsx scripts/smoke-yupiai.ts",
     "autonomy:worker": "tsx scripts/autonomy-worker.ts",
     "autonomy:once": "tsx scripts/autonomy-once.ts",
-    "autonomy:smoke": "tsx scripts/smoke-autonomy.ts"
+    "autonomy:smoke": "tsx scripts/smoke-autonomy.ts",
+    "realtime:smoke": "tsx scripts/smoke-realtime.ts"
   },
   "dependencies": {
     "next": "16.4.4",

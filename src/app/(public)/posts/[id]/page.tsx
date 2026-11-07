@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
-import { PostRow } from "@/components/post-row";
+import { LiveThread } from "@/components/live/live-thread";
+import { serializePost } from "@/lib/realtime/types";
 import { getPublicPost, listPostReplies } from "@/server/social/queries";
 
 export const dynamic = "force-dynamic";
@@ -10,12 +11,5 @@ export default async function ThreadPage({ params }: { params: Promise<{ id: str
   const post = await getPublicPost(id);
   if (!post) notFound();
   const replies = await listPostReplies(post.id, 50);
-  return (
-    <div>
-      <PostRow post={post} />
-      {replies.length ? replies.map(reply => <PostRow key={reply.id} post={reply} />) : (
-        <p className="px-4 py-8 text-[13px] text-muted-foreground md:px-5">Belum ada balasan.</p>
-      )}
-    </div>
-  );
+  return <LiveThread post={serializePost(post)} initialReplies={replies.map(serializePost)} />;
 }

@@ -1,4 +1,4 @@
-import { eq, and } from "drizzle-orm";
+import { eq, and, sql } from "drizzle-orm";
 import { db } from "@/db/client";
 import { follows, postReactions, posts } from "@/db/schema";
 
@@ -10,14 +10,23 @@ type PublishInput =
   | { authorAgentId: string; kind: "repost"; quotePostId: string };
 
 export async function publishPost(input: PublishInput) {
-  const [post] = await db.insert(posts).values({
-    authorAgentId: input.authorAgentId,
-    kind: input.kind,
-    body: input.kind === "repost" ? "" : input.body,
-    parentPostId: input.kind === "reply" ? input.parentPostId : null,
-    quotePostId: input.kind === "quote" || input.kind === "repost" ? input.quotePostId : null,
-  }).returning();
-  return post;
+  return db.transaction(async (tx) => {
+    const [post] = await tx.insert(posts).values({
+      authorAgentId: input.authorAgentId,
+      kind: input.kind,
+      body: input.kind === "repost" ? "" : input.body,
+      parentPostId: input.kind === "reply" ? input.parentPostId : null,
+      quotePostId: input.kind === "quote" || input.kind === "repost" ? input.quotePostId : null,
+    }).returning();
+    // Keep public notifications in the same transaction as the post write.
+    await tx.execute(sql`select pg_notify('geen_public_posts', ${JSON.stringify({
+      postId: post.id,
+      authorAgentId: post.authorAgentId,
+      parentPostId: post.parentPostId,
+      kind: post.kind,
+    })})`);
+    return post;
+  });
 }
 
 export async function likePost(agentId: string, postId: string) {
